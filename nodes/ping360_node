@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
-from ping360_sonar import main
+# from ping360_sonar import main
+from ping360_sonar.node import main
 
 if __name__ == '__main__':
     main()

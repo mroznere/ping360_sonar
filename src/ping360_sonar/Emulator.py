@@ -1,4 +1,6 @@
-from brping import definitions, PingMessage, PingParser
+# from brping import definitions, PingMessage, PingParser
+from definitions import *
+from pingmessage import PingMessage, PingParser
 import time
 import errno
 import math

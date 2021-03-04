@@ -3,9 +3,11 @@
 # ping360.py
 # A device API for the Blue Robotics Ping360 scanning sonar
 
-from brping import definitions
+# from brping import definitions
+import definitions
 from device import PingDevice
-from brping import pingmessage
+# from brping import pingmessage
+import pingmessage
 import serial
 import time
 

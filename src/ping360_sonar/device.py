@@ -4,8 +4,11 @@
 # A device API for devices implementing Blue Robotics ping-protocol
 
 import time
-from brping import definitions
-from brping import pingmessage
+import socket
+# from brping import definitions
+import definitions
+# from brping import pingmessage
+import pingmessage
 from collections import deque
 
 import os
@@ -25,12 +28,17 @@ class PingDevice(object):
             return
 
         try:
-            print("Opening %s at %d bps" % (device_name, baudrate))
+            print("Opening pint360 via socket")
+
+            self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+
+
+            # print("Opening %s at %d bps" % (device_name, baudrate))
 
             # Serial object for device communication
-            self.iodev = serial.Serial(device_name, baudrate)
-            self.iodev.send_break()
-            self.iodev.write("U".encode("utf-8"))
+            # self.iodev = serial.Serial(device_name, baudrate)
+            # self.iodev.send_break()
+            # self.iodev.write("U".encode("utf-8"))
 
         except Exception as e:
             print("Failed to open the given serial port")
@@ -50,7 +58,10 @@ class PingDevice(object):
     # data remaining in the buffer to be parsed, thus requiring subsequent calls to read())
     # @return None: if the buffer is empty and no message has been parsed
     def read(self):
-        bytes = self.iodev.read(self.iodev.in_waiting)
+        bytes, addr = self.sock.recvfrom(1024)
+        # self._input_buffer.extendleft(bytes)
+
+        # bytes = self.iodev.read(self.iodev.in_waiting)
         self._input_buffer.extendleft(bytes)
 
         while len(self._input_buffer):
@@ -71,7 +82,8 @@ class PingDevice(object):
     #
     # @return Number of bytes written
     def write(self, data):
-        return self.iodev.write(data)
+        return self.sock.sendto(data, ("192.168.2.2", 9091))
+        # return self.iodev.write(data)
 
     ##
     # @brief Make sure there is a device on and read some initial data
