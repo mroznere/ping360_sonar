@@ -1,3 +1,7 @@
 .vscode
 launch/test.launch
 **/*.pyc
+.all-contributorsrc
+.flake8
+.github
+.pre-commit-config.yaml
