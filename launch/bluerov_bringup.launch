@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+
+<launch>
+  <!-- roscore automatically started by roslaunch -->
+  <arg name="record" default="0" />
+  <arg name="publish_gstreamer_to_ros" default="1" />
+
+  <!-- start publishing transforms -->
+  <include file="$(find bluerov)/launch/description.launch" />
+
+  <!-- start mavlink -->
+  <include file="$(find bluerov_bringup)/launch/apm.launch" />
+
+  <!-- start imu odometry -->
+  <!--<include file="$(find bluerov)/launch/imu_odom.launch" /> -->
+
+  <include file="$(find audio_capture)/launch/capture_udp.launch" />
+
+  <!-- only publish the gstreamer stream to ros if we are on land, not on the robot -->
+  <group if="$(eval arg('publish_gstreamer_to_ros') == 1)">
+    <include file="$(find bluerov_bringup)/launch/lowhd_camera_nodelet.launch" />
+  </group>
+
+  <include file="$(find ping360_sonar)/launch/example.launch" />
+
+  <group if="$(arg record)">
+    <include file="$(find bluerov_bringup)/launch/logger.launch" />
+  </group>
+
+  <!-- Run a script to check for connections to 
+      the robot, and print a descriptive error message
+      if no connection is made after a set time. -->
+  <!--<node pkg="bluerov_bringup" name="connection_checker" type="connection_checker.py" output="screen"/>-->
+  
+</launch>
